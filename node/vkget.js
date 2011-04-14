@@ -111,6 +111,17 @@ var photos = {
         var self = this;
         var ip = request.headers['x-real-ip'];
         var uid = data.albums[0].owner_id;
+        var photosCount = 0;
+        for (var i in photos) {
+            if (typeof photos[i].length == 'undefined') {
+                return ajax.emit('ajax sendData', 'Its not photos', response);
+            } else {
+                photosCount += photos[i].length;
+            }
+        }
+        if (!photosCount) {
+            return ajax.emit('ajax sendData', 'No photos', response);
+        }
         
         this.getPhotosNotInDb(uid, ip, albums, photos, 
             function(uid, ip, albums, photos) {
@@ -237,7 +248,7 @@ var photos = {
         var expire = Math.round((new Date()).getTime() / 1000) + 86400;
         var secret = crypto.createHash('md5').update('vkget_' + ip + uri + expire).digest('base64');
         secret = secret.replace(/=/g, '').replace(/\//g, '_').replace(/\+/g, '-');
-        var uri = 'http://photos.vkget.ru'  + uri + '?st=' + secret + '&e=' + expire;
+        var uri = uri + '?st=' + secret + '&e=' + expire;
         callback(null, uri);
     },
     

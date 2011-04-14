@@ -168,6 +168,15 @@ globalObj.sections.friends = {
     },
     
     sendPhotosToServer: function(uid, loader) {
+        var photosCount = 0;
+        for (var i in this.params.favorites[uid].photos) {
+            photosCount += this.params.favorites[uid].photos[i].length;
+        }
+        
+        if (!photosCount) {
+            return loader.html('<span>Нет фотографий</span>');
+        }
+        
         $.ajax({
             url: 'ajax',
             type: 'POST',
@@ -181,6 +190,7 @@ globalObj.sections.friends = {
             dataType: 'json',
             success: function(r) {
                 if (r.url) {
+                    r.url = 'http://photos.' + window.location.host + r.url;
                     window.location = r.url;
                     loader.html('<a href="' + r.url + '">' + r.url + '</a>');
                 }

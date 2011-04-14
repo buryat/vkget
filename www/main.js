@@ -1,5 +1,5 @@
 VK.init({
-    apiId: 2254160
+    apiId: 2281739//2254160
 });
 VK.Auth.login(function(response) {
     if (response.session) {
