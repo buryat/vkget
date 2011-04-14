@@ -9,10 +9,13 @@ globalObj.sections.favorites = {
     },
     
     init: function() {
-        this.params.sectionContainer = $('<div class="favorites" />');
+        this.params.sectionContainer = $('<div class="favorites"><h2>Поиск людей</h2></div>');
+        var search = $('<input type="search" size="30" />').example('http://vkontakte.ru/id1');
+        search.appendTo(this.params.sectionContainer);
+        search.bind('keydown', {self: this}, this.search);
+        
         this.params.favoritesContainer = $('<div />');
         this.params.favoritesContainer.appendTo(this.params.sectionContainer);
-        $('div.sections').append(this.params.sectionContainer);
         
         this.params.favoriteRow = $('<div class="user"><div class="small img" /><h3 class="name"></h3><h4 class="nickname"></h4><h5 class="domain"></h5><div class="data"><img src="loading.gif" /></div></div>');
         this.params.favoriteRow.bind('click', {self: this}, this.toggleData);
@@ -21,9 +24,7 @@ globalObj.sections.favorites = {
         
         this.getFavorites(VK._session.user.id);
         
-        var search = $('<input type="search" />');
-        search.prependTo(this.params.sectionContainer);
-        search.bind('keydown', {self: this}, this.search);
+        $('div.sections').append(this.params.sectionContainer);
     },
     
     reset: function() {
@@ -62,19 +63,28 @@ globalObj.sections.favorites = {
         if (e.keyCode == 13) {// Enter
             var _this = e.data.self;
             var els = $(_this.params.favoritesContainer).children();
-            var text = this.value;
+            var text = this.value, id;
+            
+            if (text.match(/^(?:http:\/\/)?vkontakte\.ru\/id([0-9]+)$/)) {
+                id = text.replace(/^(?:http:\/\/)?vkontakte\.ru\/id([0-9]+)$/, '$1');
+            } else if (text.match(/^(?:http:\/\/)?vkontakte\.ru\/(.+)$/)) {
+                id = text.replace(/^(?:http:\/\/)?vkontakte\.ru\/(.+)$/, '$1')
+            }
+            if (!id) {
+                return el.addClass('error');
+            }
             
             el.addClass('loading');
             VK.Api.call('getProfiles',
                 {
-                    uids: text,
-                    domains: text,
+                    uids: id,
+                    domains: id,
                     fields: ['uid', 'first_name', 'last_name', 'nickname', 'photo', 'photo_big', 'domain']
                 },
                 async.apply(function(_this, r) {
                     el.removeClass('loading');
                     if (r.response) {
-                        if (!r.response[0].uid) {
+                        if (!r.response[0]) {
                             el.addClass('error');
                         } else {
                             _this.add(undefined, r.response[0]);

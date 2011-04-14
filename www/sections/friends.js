@@ -9,10 +9,13 @@ globalObj.sections.friends = {
     },
     
     init: function() {
-        this.params.sectionContainer = $('<div class="friends" />');
+        this.params.sectionContainer = $('<div class="friends"><h2>Друзья</h2></div>');
+        var search = $('<input type="search" />');
+        search.appendTo(this.params.sectionContainer);
+        search.bind('keyup', {self: this}, this.search);
+        
         this.params.friendsContainer = $('<div />');
         this.params.friendsContainer.appendTo(this.params.sectionContainer);
-        $('div.sections').append(this.params.sectionContainer);
         
         this.params.friendRow = $('<div class="user"><div class="small img" /><h3 class="name"></h3><h4 class="nickname"></h4><h5 class="domain"></h5><div class="data"><img src="loading.gif" /></div></div>');
         this.params.friendRow.bind('click', {self: this}, this.toggleData);
@@ -26,9 +29,7 @@ globalObj.sections.friends = {
             }
         });
         
-        var search = $('<input type="search" />');
-        search.prependTo(this.params.sectionContainer);
-        search.bind('keyup', {self: this}, this.search);
+        $('div.sections').append(this.params.sectionContainer);
     },
     
     reset: function() {

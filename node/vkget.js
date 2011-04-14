@@ -39,8 +39,7 @@ http.createServer(function(request, response) {
     response.writeHead(200, {
         'Content-Type': 'text/plain',
         'Server': 'mosaic',
-        'Date': new Date(),
-        'Access-Control-Allow-Origin': 'http://vksave.com'
+        'Date': new Date()
     });
 }).listen(8080);
 sys.puts("Server running at http://localhost:8080/");
@@ -236,9 +235,9 @@ var photos = {
     makeLink: function(uid, ip, callback) {
         var uri = '/' + uid + '.zip';
         var expire = Math.round((new Date()).getTime() / 1000) + 86400;
-        var secret = crypto.createHash('md5').update('vksave_' + ip + uri + expire).digest('base64');
+        var secret = crypto.createHash('md5').update('vkget_' + ip + uri + expire).digest('base64');
         secret = secret.replace(/=/g, '').replace(/\//g, '_').replace(/\+/g, '-');
-        var uri = 'http://photos.vksave.com'  + uri + '?st=' + secret + '&e=' + expire;
+        var uri = 'http://photos.vkget.ru'  + uri + '?st=' + secret + '&e=' + expire;
         callback(null, uri);
     },
     

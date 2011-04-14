@@ -1,9 +1,3 @@
-/**
- * User: sedictor
- * Date: 3/30/11
- * Time: 8:45 AM
- * File: main.js
- */
 VK.init({
     apiId: 2254160
 });
@@ -28,4 +22,5 @@ var VKPhotos = {
 }
 var globalObj = VKPhotos;
 
+require(['js/jquery.example.js']);
 require(['sections/friends', 'sections/favorites']);

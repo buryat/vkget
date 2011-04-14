@@ -11,6 +11,9 @@ body {
 .hidden {
     display:none !important;
 }
+.example {
+    color:#666;
+}
 input[type="text"], input[type="search"] {
     height:18px;
     padding:2px 12px 0;
@@ -39,7 +42,11 @@ input[type="text"].loading, input[type="search"].loading {
 }
 .sections {}
     .sections > * {
-        margin-bottom:20px;
+        margin-bottom:50px;
+    }
+    .sections > * > h2 {
+        margin-bottom:10px;
+        color:#444;
     }
 /*
  * Friends
