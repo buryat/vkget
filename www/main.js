@@ -23,6 +23,7 @@ $(document).ready(function() {
                     VK.Api.call('getProfiles', {uids: VK._session.mid}, function(r) {
                         if (r.response[0]) {
                             VK._session.user = r.response[0];
+                            VK._session.user.id = VK._session.user.uid;
                             $('#vk_auth').remove();
                             VKPhotos.init();
                         }
