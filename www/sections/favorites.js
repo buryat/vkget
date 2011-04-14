@@ -48,8 +48,10 @@ globalObj.sections.favorites = {
             async.apply(function(_this, r) {
                 if (r.response) {
                     if (r.response.length) {
-                        _this.add(undefined, r.response[0]);
-                        _this.params.favorites[r.response[0].uid] = r.response[0];
+                        for (var i in r.response) {
+                            _this.add(undefined, r.response[i]);
+                            _this.params.favorites[r.response[i].uid] = r.response[i];
+                        }
                     }
                 }
             }, this)

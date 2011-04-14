@@ -373,10 +373,10 @@ var favorites = {
                 'vkget',
                 'favorites',
                 'user_id',
-                'uid',
+                ['uid'],
                 async.apply(
                     function(user_id, err, index) {
-                        index.find('=', user_id, function(err, results) {
+                        index.find('=', user_id, 1000, 0, function(err, results) {
                             ajax.emit('ajax sendData', {response: results}, response);
                         });
                     },
