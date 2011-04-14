@@ -1,13 +1,6 @@
 VK.init({
     apiId: 2254160
 });
-VK.Auth.login(function(response) {
-    if (response.session) {
-        VKPhotos.init();
-    } else {
-        /* Пользователь нажал кнопку Отмена в окне авторизации */
-    }
-}, 2);
 
 var VKPhotos = {
     init: function() {
@@ -21,3 +14,31 @@ var globalObj = VKPhotos;
 
 require(['js/jquery.example.js']);
 require(['sections/friends', 'sections/favorites']);
+
+$(document).ready(function() {
+    VK.Api.call('isAppUser', {}, function(r) {
+        if (r.response) {
+            VK.Api.call('getUserSettings', {}, function(r) {
+                if (r.response & 2) {
+                    VK.Api.call('getProfiles', {uids: VK._session.mid}, function(r) {
+                        if (r.response[0]) {
+                            VK._session.user = r.response[0];
+                            $('#vk_auth').remove();
+                            VKPhotos.init();
+                        }
+                    });
+                } else {
+                    $('#vk_auth').bind('click', function() {
+                        VK.Auth.login(function(response) {
+                            $('#vk_auth').remove();
+                            if (response.session) {
+                                VKPhotos.init();
+                            } else {
+                            }
+                        }, 2);
+                    });
+                }
+            });
+        }
+    });
+});

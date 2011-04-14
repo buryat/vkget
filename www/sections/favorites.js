@@ -22,7 +22,7 @@ globalObj.sections.favorites = {
         
         this.params.albumInfoRow = $('<div></div>');
         
-        this.getFavorites(VK._session.user.id);
+        this.getFavorites(VK._session.user.uid);
         
         $('div.sections').append(this.params.sectionContainer);
     },
@@ -125,7 +125,7 @@ globalObj.sections.favorites = {
             data: {
                 action: 'getFavorites',
                 data: JSON.stringify({
-                    user_id: VK._session.user.id
+                    user_id: user_id
                 })
             },
             dataType: 'json',
