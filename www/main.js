@@ -29,14 +29,16 @@ $(document).ready(function() {
                         }
                     });
                 } else {
-                    $('#vk_auth').bind('click', function() {
+                    $('#vk_auth').click(function() {
                         VK.Auth.login(function(response) {
-                            $('#vk_auth').remove();
                             if (response.session) {
+                                $('#vk_auth').remove();
                                 VKPhotos.init();
                             } else {
+                                alert('Для работы сайта необходимо ваше разрешение')
                             }
                         }, 2);
+                        return false;
                     });
                 }
             });
