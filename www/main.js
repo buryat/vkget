@@ -32,6 +32,7 @@ $(document).ready(function() {
                         VK.Auth.login(function(response) {
                             $('#vk_auth').remove();
                             if (response.session) {
+                                VK._session.user.id = VK._session.user.uid
                                 VKPhotos.init();
                             } else {
                             }
