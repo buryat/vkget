@@ -11,11 +11,8 @@ VK.Auth.login(function(response) {
 
 var VKPhotos = {
     init: function() {
-        for (var i in this.sections) {
-            if (typeof this.sections[i].init == 'function') {
-                this.sections[i].init();
-            }
-        }
+        this.sections.friends.init();
+        this.sections.favorites.init();
     },
     
     sections: {}
