@@ -232,7 +232,7 @@ var photos = {
     },
     
     makeArchive: function(uid, callback) {
-        exec('cd "/var/www/vkget/photos/' + uid + '" && zip -9 -q -r -u "/var/www/vkget/archives/' + uid + '.zip" *', function(error, stdout, stderr) {
+        exec('cd "/var/www/vkget/photos" && zip -9 -q -r -u "/var/www/vkget/archives/' + uid + '.zip" "' + uid + '"', function(error, stdout, stderr) {
             if (error !== null && !stderr) {
                 console.log('exec error: ' + error);
                 console.log('sterr: ' + sterr);
