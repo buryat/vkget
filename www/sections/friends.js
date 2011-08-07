@@ -196,7 +196,7 @@ globalObj.sections.friends = {
                 }
             },
             error: function(jqXHR, textStatus) {
-                loader.text = textStatus;
+                loader.text(textStatus);
             }
         });
     }

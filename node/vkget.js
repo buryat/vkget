@@ -8,100 +8,102 @@ var sys = require("sys"),
     async = require('async'),
     crypto = require('crypto'),
     hs = require('node-handlersocket');
-    
+
 http.createServer(function(request, response) {
     var uri = url.parse(request.url).href;
-    
+
     request.content = '';
     request.addListener('data', function(data) {
         request.content += data;
     });
     request.addListener('end', function() {
         request.content = querystring.parse(request.content);
-        if (request.content.data) {
-            request.content.data = JSON.parse(request.content.data);
-        }
         if (uri === '/ajax') {
-            if (!request.content.action) {
+            if (typeof request.content.action == 'undefined') {
                 response.write('No action');
                 response.end();
-            } else {
-                if (typeof ajax[request.content.action] == 'function') {
-                    ajax[request.content.action](request, response);
-                } else {
-                    response.write('No action "' + request.content.action + '"');
-                    response.end();
-                }
             }
+            if (request.content.data) {
+                request.content.data = JSON.parse(request.content.data);
+            }
+            if (typeof Actions[request.content.action] == 'function') {
+                Actions[request.content.action](request, response);
+            } else {
+                response.write('No action "' + request.content.action + '"');
+                response.end();
+            }
+            response.writeHead(200, {
+                'Content-Type': 'text/plain',
+                'Server': 'mosaic',
+                'Date': new Date()
+            });
+        } else {
+            response.writeHead(404, {
+                'Content-Type': 'text/plain',
+                'Server': 'mosaic',
+                'Date': new Date()
+            });
+            response.end();
         }
     });
-    
-    response.writeHead(200, {
-        'Content-Type': 'text/plain',
-        'Server': 'mosaic',
-        'Date': new Date()
-    });
 }).listen(8080);
-sys.puts("Server running at http://localhost:8080/");
+console.log("Server running at http://localhost:8080/");
 
-ajax = new events.EventEmitter();
-(function(obj) {
-    var _class = {
-        sendData: function(data, response) {
+var Actions = (function() {
+    return {
+        downloadPhotos: function(request, response) {
+            var data = request.content.data;
+            if (!data.albums) {
+                return Ajax.emit('sendData', 'No albums', response);
+            }
+            if (!data.photos) {
+                return Ajax.emit('sendData', 'No photos', response);
+            }
+            if (!data.albums[0].owner_id) {
+                return Ajax.emit('sendData', 'No owner', response);
+            }
+            photos.download(request, response);
+        },
+
+        saveFavorite: function(request, response) {
+            var data = request.content.data;
+            if (!data.user_id) {
+                return Ajax.emit('sendData', 'No user_id', response);
+            }
+            if (!data.uid) {
+                return Ajax.emit('sendData', 'No uid', response);
+            }
+            favorites.save(request, response);
+        },
+
+        getFavorites: function(request, response) {
+            var data = request.content.data;
+            if (!data.user_id) {
+                return Ajax.emit('sendData', 'No user_id', response);
+            }
+            favorites.getData(request, response);
+        }
+    }
+}());
+
+var Ajax = (function() {
+    var self = new events.EventEmitter(),
+        privateSendData = function(data, response) {
             response.write(JSON.stringify(data));
             response.end();
         },
-
-        sendOk: function(response) {
+        privateSendOk = function(response) {
             response.write(querystring.stringify({
                 response: 'ok'
             }));
             response.end();
-        },
-
-        init: function() {
-            this.addListener('ajax sendOk', this.sendOk);
-            this.addListener('ajax sendData', this.sendData);
-        },
-
-        downloadPhotos: function(request, response) {
-            var data = request.content.data;
-            if (!data.albums) {
-                return this.emit('ajax sendData', 'No albums', response);
-            }
-            if (!data.photos) {
-                return this.emit('ajax sendData', 'No photos', response);
-            }
-            if (!data.albums[0].owner_id) {
-                return this.emit('ajax sendData', 'No owner', response);
-            }
-            photos.download(request, response);
-        },
-        
-        saveFavorite: function(request, response) {
-            var data = request.content.data;
-            if (!data.user_id) {
-                return this.emit('ajax sendData', 'No user_id', response);
-            }
-            if (!data.uid) {
-                return this.emit('ajax sendData', 'No uid', response);
-            }
-            favorites.save(request, response);
-        },
-        
-        getFavorites: function(request, response) {
-            var data = request.content.data;
-            if (!data.user_id) {
-                return this.emit('ajax sendData', 'No user_id', response);
-            }
-            favorites.get(request, response);
         }
-    }
-    for (var i in _class) {
-        obj[i] = _class[i];
-    }
-    obj.init();
-})(ajax);
+
+    self.addListener('sendOk', privateSendOk);
+    self.addListener('sendData', privateSendData);
+
+    return self;
+}());
 
 var photos = {
     download: function(request, response) {
@@ -114,13 +116,13 @@ var photos = {
         var photosCount = 0;
         for (var i in photos) {
             if (typeof photos[i].length == 'undefined') {
-                return ajax.emit('ajax sendData', 'Its not photos', response);
+                return Ajax.emit('sendData', 'Its not photos', response);
             } else {
                 photosCount += photos[i].length;
             }
         }
         if (!photosCount) {
-            return ajax.emit('ajax sendData', 'No photos', response);
+            return Ajax.emit('sendData', 'No photos', response);
         }
         
         this.getPhotosNotInDb(uid, ip, albums, photos, 
@@ -133,10 +135,10 @@ var photos = {
                     self.makeLink(uid, ip, function(err, result) {
                         if (result) {
                             console.log('Done ' + uid + ' url: ' + result);
-                            ajax.emit('ajax sendData', {url: result}, response);
+                            Ajax.emit('sendData', {url: result}, response);
                         } else {
                             console.log('Error ' + uid);
-                            ajax.emit('ajax sendData', 'error', response);
+                            Ajax.emit('sendData', 'error', response);
                         }
                     });
                 } else {
@@ -151,10 +153,10 @@ var photos = {
                     function(err, results) {
                         if (results[5]) {
                             console.log('Done ' + uid + ' url: ' + results[5]);
-                            ajax.emit('ajax sendData', {url: results[5]}, response);
+                            Ajax.emit('sendData', {url: results[5]}, response);
                         } else {
                             console.log('Error ' + uid);
-                            ajax.emit('ajax sendData', 'error', response);
+                            Ajax.emit('sendData', 'error', response);
                         }
                     });
                 }
@@ -245,8 +247,8 @@ var photos = {
     
     makeLink: function(uid, ip, callback) {
         var uri = '/' + uid + '.zip';
-        var expire = Math.round((new Date()).getTime() / 1000) + 86400;
-        var secret = crypto.createHash('md5').update('vkget_' + ip + uri + expire).digest('base64');
+        var expire = Math.round((new Date()).getTime() / 1000) + 86400*30;
+        var secret = crypto.createHash('md5').update('vkget_' + uri + expire).digest('base64');//ip + uri + expire).digest('base64');
         secret = secret.replace(/=/g, '').replace(/\//g, '_').replace(/\+/g, '-');
         var uri = uri + '?st=' + secret + '&e=' + expire;
         callback(null, uri);
@@ -334,19 +336,19 @@ var photos = {
                 'vkget',
                 'logs',
                 'PRIMARY',
-                ['day', 'hour', 'users', 'albums', 'photos'],
+                ['date', 'hour', 'users', 'albums', 'photos'],
                 function(err, index) {
                     var date = new Date();
-                    var month = date.getMonth(), day = date.getDay();
+                    var month = date.getMonth() + 1, day = date.getDate();
                     month = month < 10 ? '0' + month : month;
                     day   = day   < 10 ? '0' + day   : day;
                     var currentDate = date.getFullYear() + '-' + month + '-' + day;
                     var currentHour = date.getHours();
                     
-                    index.find('=', [currentDate, currentHour], 
+                    index.find('=', [currentDate, currentHour],
                         async.apply(
                             function(currentDate, currentHour, err, result) {
-                                if (!result.length) {
+                                if (!result || !result.length) {
                                     index.insert([currentDate, currentHour, 1, albumsCount, photosCount], function(err) {
                                         con.end();
                                     });
@@ -374,7 +376,7 @@ var photos = {
 }
 
 var favorites = {
-    get: function(request, response) {
+    getData: function(request, response) {
         var data = request.content.data;
         var user_id = data.user_id;
         
@@ -388,7 +390,7 @@ var favorites = {
                 async.apply(
                     function(user_id, err, index) {
                         index.find('=', user_id, 1000, 0, function(err, results) {
-                            ajax.emit('ajax sendData', {response: results}, response);
+                            Ajax.emit('sendData', {response: results}, response);
                         });
                     },
                     user_id
@@ -413,7 +415,7 @@ var favorites = {
                     function(user_id, uid, err, index) {
                         index.insert([user_id, uid], function() {
                             con.end();
-                            ajax.emit('ajax sendOk', response);
+                            Ajax.emit('sendOk', response);
                         });
                     },
                     user_id, uid
