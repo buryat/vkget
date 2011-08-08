@@ -215,7 +215,7 @@ var photos = {
                 files = files.join(' ');
                 if (files) {
                     console.log('Download started ' + uid + '/' + title);
-                    exec('cd "/var/www/vkget/photos/' + uid + '/' + title + '" && wget ' + files, function(error, stdout, stderr) {
+                    exec('cd "/var/www/vkget/photos/' + uid + '/' + title + '" && parallel -j 100 -l 1 wget -c ::: ' + files, function(error, stdout, stderr) {
                         if (error !== null && !stderr) {
                             console.log('exec error: ' + error);
                             console.log('sterr: ' + stderr);
