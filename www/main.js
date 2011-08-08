@@ -19,7 +19,7 @@ $(document).ready(function() {
     VK.Api.call('isAppUser', {}, function(r) {
         if (r.response) {
             VK.Api.call('getUserSettings', {}, function(r) {
-                if (r.response & 2) {
+                if (r.response) {
                     VK.Api.call('getProfiles', {uids: VK._session.mid}, function(r) {
                         if (r.response[0]) {
                             VK._session.user = r.response[0];
@@ -28,20 +28,20 @@ $(document).ready(function() {
                             VKPhotos.init();
                         }
                     });
-                } else {
-                    $('#vk_auth').click(function() {
-                        VK.Auth.login(function(response) {
-                            if (response.session) {
-                                $('#vk_auth').remove();
-                                VKPhotos.init();
-                            } else {
-                                alert('Для работы сайта необходимо ваше разрешение')
-                            }
-                        }, 2);
-                        return false;
-                    });
                 }
             });
         }
     });
 });
+
+function doLogin() {
+    VK.Auth.login(function(response) {
+        if (response.session) {
+            $('#vk_auth').remove();
+            VKPhotos.init();
+        } else {
+            alert('Для работы сайта необходимо ваше разрешение')
+        }
+    }, 2);
+    return false;
+}

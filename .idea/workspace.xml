@@ -4,6 +4,7 @@
     <list default="true" id="3e69f67f-d89d-441f-a5a6-8b9d960684da" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/index.html" afterPath="$PROJECT_DIR$/www/index.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/www/main.js" afterPath="$PROJECT_DIR$/www/main.js" />
     </list>
     <ignored path="vkget.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,19 +27,28 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/www/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="15" column="0" selection-start="645" selection-end="645" vertical-scroll-proportion="-10.8">
+            <state line="47" column="7" selection-start="1826" selection-end="1826" vertical-scroll-proportion="0.6404239">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="main.js" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/www/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="18" column="46" selection-start="376" selection-end="376" vertical-scroll-proportion="0.23841059">
+            <state line="19" column="25" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="favorites.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/www/sections/favorites.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="24" column="16" selection-start="1084" selection-end="1087" vertical-scroll-proportion="-15.615385">
               <folding />
             </state>
           </provider>
@@ -58,10 +68,10 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/www/main.js" />
         <option value="$PROJECT_DIR$/node/test.js" />
         <option value="$PROJECT_DIR$/www/sections/friends.js" />
         <option value="$PROJECT_DIR$/node/vkget.js" />
+        <option value="$PROJECT_DIR$/www/main.js" />
         <option value="$PROJECT_DIR$/www/index.html" />
       </list>
     </option>
@@ -122,6 +132,24 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vkget" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="vkget" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="www" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="sections" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -268,11 +296,6 @@
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/sections/favorites.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="10" column="22" selection-start="253" selection-end="253" vertical-scroll-proportion="0.13372956" />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/www/js/jquery.example.js">
       <provider selected="true" editor-type-id="text-editor">
         <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" />
@@ -302,16 +325,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/www/index.html">
+    <entry file="file://$PROJECT_DIR$/www/sections/favorites.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="15" column="0" selection-start="645" selection-end="645" vertical-scroll-proportion="-10.8">
+        <state line="24" column="16" selection-start="1084" selection-end="1087" vertical-scroll-proportion="-15.615385">
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/www/main.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state line="18" column="46" selection-start="376" selection-end="376" vertical-scroll-proportion="0.23841059">
+        <state line="19" column="25" selection-start="402" selection-end="402" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/www/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="47" column="7" selection-start="1826" selection-end="1826" vertical-scroll-proportion="0.6404239">
           <folding />
         </state>
       </provider>
