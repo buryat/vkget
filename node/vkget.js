@@ -1,5 +1,5 @@
-var sys = require("sys"),
-    http = require("http"),
+var util = require('util'),
+    http = require('http'),
     url = require('url'),
     events = require('events'),
     exec = require('child_process').exec,
